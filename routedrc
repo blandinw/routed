@@ -1,0 +1,6 @@
+{:title    "Status: "
+ :command  "coffee path/to/dispatcher.coffee"
+ :ssl-cert "path/to/mycert.pem"
+ :ssl-key  "path/to/mykey.key"
+ :modes    [["Dev"  "192.168.111.222" 443 80]
+            ["Prod" "192.22.33.44"    443 80]]}
