@@ -13,8 +13,11 @@ inspect = (x) ->
 usage = ->
   log "usage: #{process.argv[0]} #{process.argv[1]} <host> <port> <cert> <key> <redirect>"
 
+is_ssl = (p) ->
+  p in [443]
+
 fmt_request = (opts) ->
-  scheme = if opts.port == 443
+  scheme = if is_ssl(opts.port)
     "HTTPS"
   else
     "HTTP"
@@ -30,9 +33,6 @@ fmt_request = (opts) ->
     " (#{opts.hostname})"
 
   "#{scheme} #{opts.method} #{host}#{opts.path}#{paren}"
-
-is_ssl = (p) ->
-  p in [443]
 
 main = ->
   host          = process.argv[2]
@@ -71,7 +71,12 @@ main = ->
     req.on 'end', ->
       log "> #{fmt_request(opts)}"
 
-      new_req = https.request opts, (new_resp) ->
+      protocol = if is_ssl(port)
+        https
+      else
+        http
+
+      new_req = protocol.request opts, (new_resp) ->
         resp.writeHead new_resp.statusCode, new_resp.headers
         new_resp.on 'data', (chunk) ->
           resp.write(chunk)
