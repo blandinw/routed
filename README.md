@@ -11,25 +11,18 @@ Create a config file (located at ~/.routedrc) like so (cf. below for details):
  :ssl-cert "path/to/cert.pem"  ;; only if using https/ssl
  :ssl-key  "path/to/mykey.key" ;; only if using https/ssl
  :modes    [["Dev"  "192.168.111.222" 443 80]
-            ["Prod" "192.241.206.55"  443 80]]}
+            ["Prod" "192.22.33.44"    443 80]]}
 ```
 
-To use the provided dispatcher:
+You'll need CoffeeScript to use the provided dispatcher:
 ```
 npm install -g coffee-script
-# if specified ports are < 1024, will need to be started using sudo
 ```
 
-To run routed from repo:
+Finally, grab the latest release at [github.com/blandinw/routed/releases](https://github.com/blandinw/routed/releases).
+Then, run:
 ```
-lein cljsbuild once dev
-zip routed.nw package.json public/index.html public/js/cljs.js
-/path/to/node-webkit.app/Contents/MacOS/node-webkit routed.nw # may need sudo if port < 1024
-```
-
-You can create your own dispatcher. Implement the following interface:
-```
-mydispatcher <ip> <port> <cert> <key> <redirect>
+path/to/routed.app/Contents/MacOS/node-webkit # sudo is needed for ports < 1024
 ```
 
 ## Config file
@@ -42,6 +35,19 @@ key | required | value | doc
 :ssl-cert | optional | string | Path to certificate to use with SSL
 :ssl-key | optional | string | Path to key to use with SSL
 
+## Dev
+
+To run from source:
+```bash
+$ lein cljsbuild once dev # compile CLJS to JS
+$ zip routed.nw package.json public/index.html public/js/cljs.js # create node-webkit app
+$ /path/to/node-webkit.app/Contents/MacOS/node-webkit routed.nw # may need sudo if port < 1024
+```
+
+You can create your own dispatcher. Implement the following interface:
+```
+mydispatcher <ip> <port> <cert> <key> <redirect>
+```
 
 ## License
 
