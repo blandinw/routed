@@ -37,9 +37,14 @@ is_ssl = (p) ->
 main = ->
   host          = process.argv[2]
   port          = process.argv[3] && parseInt(process.argv[3], 10)
-  cert          = process.argv[4] && fs.readFileSync(process.argv[4])
-  key           = process.argv[5] && fs.readFileSync(process.argv[5])
   redirect_port = process.argv[6] && parseInt(process.argv[6], 10)
+
+  if is_ssl(port) || is_ssl(redirect_port)
+    cert = process.argv[4] && fs.readFileSync(process.argv[4])
+    key  = process.argv[5] && fs.readFileSync(process.argv[5])
+  else
+    cert = null
+    key  = null
 
   if not host
     usage()
